@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./";
+//短信
+message SendSmsReq{
+  string Phone=1;
+}
+message SendSmsResp{
+  int32 Code=1;
+  string Msg=2;
+}
+//注册
+message RegisterReq {
+  string Username = 1;
+  string Password =2;
+  string Phone=3;
+  string code=4;
+}
+
+message RegisterResp {
+  int32 Id = 1;
+  string Msg=2;
+}
+//登录
+message LoginReq{
+  string Username=1;
+  string Password=2;
+  string Phone=3;
+  string code=4;
+}
+message LoginResp{
+  int32 Id=1;
+  string Msg=2;
+  string Token=3;
+}
+service Order {
+  rpc Register(RegisterReq) returns (RegisterResp);
+  rpc Login(LoginReq) returns (LoginResp);
+  rpc SendSms(SendSmsReq) returns (SendSmsResp);
+}

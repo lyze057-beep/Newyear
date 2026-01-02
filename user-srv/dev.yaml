@@ -1,0 +1,8 @@
+Nacos:
+  Host: "115.190.45.90" # Nacos 服务器地址
+  Port: 8848            # Nacos 端口 (默认8848)
+  PublicId: ""          # Namespace ID (public 空间留空)
+  NaCosName: "nacos"    # 账号
+  Password: "nacos"     # 密码
+  DataId: "go-api.yaml" # Nacos 上的配置 ID
+  Group: "DEFAULT_GROUP" # 分组

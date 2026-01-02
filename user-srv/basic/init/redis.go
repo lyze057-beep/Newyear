@@ -1,0 +1,25 @@
+package init
+
+import (
+	"5/work/Newyear/user-srv/basic/config"
+	"context"
+	"fmt"
+	"github.com/go-redis/redis/v8"
+)
+
+var ctx = context.Background()
+
+func InitRedis() {
+	redisConf := config.AppConf.Redis
+	config.Rdb = redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", redisConf.Host, redisConf.Port),
+		Password: redisConf.Password, // no password set
+		DB:       0,                  // use default DB
+	})
+
+	_, err := config.Rdb.Ping(ctx).Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("redis init success")
+}
