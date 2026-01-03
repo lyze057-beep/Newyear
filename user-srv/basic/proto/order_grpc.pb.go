@@ -19,9 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Order_Register_FullMethodName = "/proto.Order/Register"
-	Order_Login_FullMethodName    = "/proto.Order/Login"
-	Order_SendSms_FullMethodName  = "/proto.Order/SendSms"
+	Order_Register_FullMethodName       = "/proto.Order/Register"
+	Order_Login_FullMethodName          = "/proto.Order/Login"
+	Order_SendSms_FullMethodName        = "/proto.Order/SendSms"
+	Order_UpdatePassword_FullMethodName = "/proto.Order/UpdatePassword"
+	Order_ListUser_FullMethodName       = "/proto.Order/ListUser"
+	Order_ListGet_FullMethodName        = "/proto.Order/ListGet"
+	Order_Product_FullMethodName        = "/proto.Order/Product"
+	Order_ListProduct_FullMethodName    = "/proto.Order/ListProduct"
+	Order_GetProduct_FullMethodName     = "/proto.Order/GetProduct"
 )
 
 // OrderClient is the client API for Order service.
@@ -31,6 +37,12 @@ type OrderClient interface {
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.CallOption) (*SendSmsResp, error)
+	UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error)
+	ListUser(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserResp, error)
+	ListGet(ctx context.Context, in *ListGetReq, opts ...grpc.CallOption) (*ListGetResp, error)
+	Product(ctx context.Context, in *ProductReq, opts ...grpc.CallOption) (*ProductResp, error)
+	ListProduct(ctx context.Context, in *ListProductReq, opts ...grpc.CallOption) (*ListProductResp, error)
+	GetProduct(ctx context.Context, in *GetProductReq, opts ...grpc.CallOption) (*GetProductResp, error)
 }
 
 type orderClient struct {
@@ -71,6 +83,66 @@ func (c *orderClient) SendSms(ctx context.Context, in *SendSmsReq, opts ...grpc.
 	return out, nil
 }
 
+func (c *orderClient) UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdatePasswordResp)
+	err := c.cc.Invoke(ctx, Order_UpdatePassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) ListUser(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserResp)
+	err := c.cc.Invoke(ctx, Order_ListUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) ListGet(ctx context.Context, in *ListGetReq, opts ...grpc.CallOption) (*ListGetResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListGetResp)
+	err := c.cc.Invoke(ctx, Order_ListGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) Product(ctx context.Context, in *ProductReq, opts ...grpc.CallOption) (*ProductResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProductResp)
+	err := c.cc.Invoke(ctx, Order_Product_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) ListProduct(ctx context.Context, in *ListProductReq, opts ...grpc.CallOption) (*ListProductResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListProductResp)
+	err := c.cc.Invoke(ctx, Order_ListProduct_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) GetProduct(ctx context.Context, in *GetProductReq, opts ...grpc.CallOption) (*GetProductResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProductResp)
+	err := c.cc.Invoke(ctx, Order_GetProduct_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
@@ -78,6 +150,12 @@ type OrderServer interface {
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	SendSms(context.Context, *SendSmsReq) (*SendSmsResp, error)
+	UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordResp, error)
+	ListUser(context.Context, *ListUserReq) (*ListUserResp, error)
+	ListGet(context.Context, *ListGetReq) (*ListGetResp, error)
+	Product(context.Context, *ProductReq) (*ProductResp, error)
+	ListProduct(context.Context, *ListProductReq) (*ListProductResp, error)
+	GetProduct(context.Context, *GetProductReq) (*GetProductResp, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -93,6 +171,24 @@ func (UnimplementedOrderServer) Login(context.Context, *LoginReq) (*LoginResp, e
 }
 func (UnimplementedOrderServer) SendSms(context.Context, *SendSmsReq) (*SendSmsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendSms not implemented")
+}
+func (UnimplementedOrderServer) UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePassword not implemented")
+}
+func (UnimplementedOrderServer) ListUser(context.Context, *ListUserReq) (*ListUserResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
+}
+func (UnimplementedOrderServer) ListGet(context.Context, *ListGetReq) (*ListGetResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListGet not implemented")
+}
+func (UnimplementedOrderServer) Product(context.Context, *ProductReq) (*ProductResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Product not implemented")
+}
+func (UnimplementedOrderServer) ListProduct(context.Context, *ListProductReq) (*ListProductResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListProduct not implemented")
+}
+func (UnimplementedOrderServer) GetProduct(context.Context, *GetProductReq) (*GetProductResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -161,6 +257,114 @@ func _Order_SendSms_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_UpdatePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).UpdatePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_UpdatePassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).UpdatePassword(ctx, req.(*UpdatePasswordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_ListUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).ListUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_ListUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).ListUser(ctx, req.(*ListUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_ListGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListGetReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).ListGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_ListGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).ListGet(ctx, req.(*ListGetReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_Product_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).Product(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_Product_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).Product(ctx, req.(*ProductReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_ListProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProductReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).ListProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_ListProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).ListProduct(ctx, req.(*ListProductReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_GetProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProductReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).GetProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_GetProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).GetProduct(ctx, req.(*GetProductReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -179,6 +383,30 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendSms",
 			Handler:    _Order_SendSms_Handler,
+		},
+		{
+			MethodName: "UpdatePassword",
+			Handler:    _Order_UpdatePassword_Handler,
+		},
+		{
+			MethodName: "ListUser",
+			Handler:    _Order_ListUser_Handler,
+		},
+		{
+			MethodName: "ListGet",
+			Handler:    _Order_ListGet_Handler,
+		},
+		{
+			MethodName: "Product",
+			Handler:    _Order_Product_Handler,
+		},
+		{
+			MethodName: "ListProduct",
+			Handler:    _Order_ListProduct_Handler,
+		},
+		{
+			MethodName: "GetProduct",
+			Handler:    _Order_GetProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -20,5 +20,6 @@ func InitMysql() {
 		panic(err)
 	}
 	fmt.Println("mysql init success")
-	config.DB.AutoMigrate(&model.User{})
+	config.DB.AutoMigrate(&model.User{}, &model.Product{}, &model.OrderMain{},
+		&model.OrderItem{}, &model.ShoppingCart{})
 }

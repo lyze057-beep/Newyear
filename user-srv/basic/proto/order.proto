@@ -35,8 +35,94 @@ message LoginResp{
   string Msg=2;
   string Token=3;
 }
+//修改密码
+message UpdatePasswordReq{
+  string Username=1;
+  string NewPassword=2;
+}
+message UpdatePasswordResp{
+  int32 Code=1;
+  string Msg=2;
+}
+//查询用户
+message ListUserReq{
+  string Username =1;
+}
+message UserInfo{
+  string Username=1;
+  string Phone=2;
+}
+message ListUserResp{
+  int32 Code=1;
+  string Msg=2;
+  UserInfo Data=3;
+}
+//批量查询
+message ListGetReq{
+
+}
+message ListUser{
+  string Username =1;
+  string Password=2;
+  string Phone =3;
+  int32 Id=4;
+}
+message ListGetResp{
+  int32 Code=1;
+  string Msg=2;
+  repeated ListUser Data=3;
+}
+//商品添加
+message ProductReq{
+  string ProductName=1;
+   int32   ProductPrice=2;
+  int32 ProductNum=3;
+  int32 Status=4;
+}
+message ProductResp{
+  int32 ProductId=1;
+  int32 Code=2;
+  string Msg=3;
+}
+//根据id查询商品
+message ListProductReq{
+  int32 Id=1;
+}
+message GetProduct{
+  string ProductName=1;
+  int32   ProductPrice=2;
+  int32 ProductNum=3;
+  int32 Status=4;
+  int32 Id=5;
+}
+message ListProductResp{
+  int32 Code=1;
+  string Msg=2;
+   GetProduct Data=3;
+}
+//查询商品
+message GetProductReq{
+}
+message Product{
+  string ProductName=1;
+  int32   ProductPrice=2;
+  int32 ProductNum=3;
+  int32 Status=4;
+  int32 Id=5;
+}
+message GetProductResp{
+  int32 Code=1;
+  string Msg=2;
+  repeated Product Data=3;
+}
 service Order {
   rpc Register(RegisterReq) returns (RegisterResp);
   rpc Login(LoginReq) returns (LoginResp);
   rpc SendSms(SendSmsReq) returns (SendSmsResp);
+  rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordResp);
+  rpc ListUser(ListUserReq) returns (ListUserResp);
+  rpc ListGet(ListGetReq) returns (ListGetResp);
+  rpc Product(ProductReq) returns (ProductResp);
+  rpc ListProduct(ListProductReq) returns (ListProductResp);
+  rpc GetProduct(GetProductReq) returns (GetProductResp);
 }

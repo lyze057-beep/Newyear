@@ -13,8 +13,28 @@ type Product struct {
 	ProductName  string `gorm:"type:varchar(30);not null;comment:商品名称"`
 	ProductPrice int    `gorm:"type:int;not null;comment:商品单价"`
 	ProductNum   int    `gorm:"type:int;not null;comment:商品库存"`
+	Status       int    `gorm:"type:tinyint;default:0;comment:'商品状态:1=上架,2=下架'"`
 }
-type Order struct {
+type OrderMain struct {
 	gorm.Model
-	UserID uint `gorm:"type:"`
+	OrderNo     string  `gorm:"type:varchar(255);index;comment:订单编号"`
+	UserID      uint    `gorm:"type:int;index;comment:关联用户id"`
+	TotalAmount float64 `gorm:"type:decimal(10,2);not null;comment:订单总金额"`
+	PayStatus   int     `gorm:"type:tinyint;default:0;comment:'支付状态:1=已支付,2=未支付'"`
+	OrderStatus int     `gorm:"type:tinyint;default:0;comment:'订单状态:1=待发货,2=待收货,3=完成,4=取消'"`
+}
+type OrderItem struct {
+	gorm.Model
+	OrderID      uint    `gorm:"type:int;comment:关联订单id;not null"`
+	ProductID    uint    `gorm:"type:int;comment:关联商品id;not null"`
+	ProductName  string  `gorm:"type:varchar(30);not null;comment:商品名称"`
+	ProductPrice int     `gorm:"type:int;not null;comment:商品单价"`
+	Quantity     int     `gorm:"type:int;not null;comment:购买数量"`
+	Amount       float64 `gorm:"type:decimal(10,2);not null;comment:商品小计"`
+}
+type ShoppingCart struct {
+	gorm.Model
+	UserID    uint `gorm:"type:int;not null;comment:关联用户id"`
+	ProductID uint `gorm:"type:int;not null;comment:关联商品id"`
+	Quantity  int  `gorm:"type:int;not null;comment:购买数量"`
 }
