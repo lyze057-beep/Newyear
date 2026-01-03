@@ -102,17 +102,23 @@ func (o *OrderDao) GetOrder(PayStatus int) (*model.OrderMain, error) {
 // 购物车添加条目，存在则累加数量
 func (d *CartDao) Add(userID uint, productID uint, qty int) error {
 	var item model.ShoppingCart
-	if err := config.DB.Where("user_id=? and product_id=?", userID, productID).
-		First(&item).Error; err != nil {
+	// 尝试查询是否存在
+	err := config.DB.Where("user_id=? and product_id=?", userID, productID).First(&item).Error
+
+	if err == nil {
+		// 存在则更新数量（这里选择覆盖，如果需要累加可以用 +=）
 		item.Quantity = qty
 		return config.DB.Save(&item).Error
 	}
-	item = model.ShoppingCart{
-		UserID:    item.UserID,
-		ProductID: item.ProductID,
+
+	// 不存在则创建新条目
+	// 注意：这里必须使用传入参数 userID 和 productID，不能使用 item.UserID（因为 item 是空的）
+	newItem := model.ShoppingCart{
+		UserID:    userID,
+		ProductID: productID,
 		Quantity:  qty,
 	}
-	return config.DB.Create(&item).Error
+	return config.DB.Create(&newItem).Error
 }
 
 // list获取用户购物车列表

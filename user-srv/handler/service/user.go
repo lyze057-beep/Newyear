@@ -273,15 +273,56 @@ func (s *Server) GetOrder(_ context.Context, in *__.GetOrderReq) (*__.GetOrderRe
 		Data: get,
 	}, nil
 }
-func (s *Server) CartAdd(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
-	return &__.GetOrderResp{}, nil
+func (s *Server) CartAdd(_ context.Context, in *__.CartAddReq) (*__.CartAddResp, error) {
+	fmt.Printf("收到请求: UserID=%d, ProductID=%d, Quantity=%d\n", in.UserID, in.ProductID, in.Quantity)
+	cartDao := &dao.CartDao{}
+	if err := cartDao.Add(uint(in.UserID), uint(in.ProductID), int(in.Quantity)); err != nil {
+		return nil, fmt.Errorf("购物车添加失败")
+	}
+	return &__.CartAddResp{
+		Code: 200,
+		Msg:  "购物车添加成功",
+	}, nil
 }
-func (s *Server) CartList(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
-	return &__.GetOrderResp{}, nil
+func (s *Server) CartList(_ context.Context, in *__.CartListReq) (*__.CartListResp, error) {
+	listdao := &dao.CartDao{}
+	list, err := listdao.List(uint(in.UserID))
+	if err != nil {
+		return nil, fmt.Errorf("数据库查询失败" + err.Error())
+	}
+	cartInfos := make([]*__.CartInfo, 0, len(list))
+	for _, item := range list {
+		cartInfos = append(cartInfos, &__.CartInfo{
+			ProductID: int32(item.ProductID),
+			UserID:    int32(item.UserID),
+			Quantity:  int32(item.Quantity),
+		})
+	}
+	return &__.CartListResp{
+		Code: 200,
+		Msg:  "查询成功",
+		Data: cartInfos,
+	}, nil
 }
-func (s *Server) CartDelete(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
-	return &__.GetOrderResp{}, nil
+func (s *Server) CartDelete(_ context.Context, in *__.CartDeleteReq) (*__.CartDeleteResp, error) {
+	deletedao := &dao.CartDao{}
+	err := deletedao.Remove(uint(in.UserID), uint(in.ProductID))
+	if err != nil {
+		return nil, fmt.Errorf("删除失败")
+	}
+	return &__.CartDeleteResp{
+		Code: 200,
+		Msg:  "删除成功",
+	}, nil
 }
-func (s *Server) DelCart(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
-	return &__.GetOrderResp{}, nil
+func (s *Server) DelCart(_ context.Context, in *__.DelCartReq) (*__.DelCartResp, error) {
+	deldao := &dao.CartDao{}
+	err := deldao.Clear(uint(in.UserID))
+	if err != nil {
+		return nil, fmt.Errorf("清空失败")
+	}
+	return &__.DelCartResp{
+		Code: 200,
+		Msg:  "清空成功",
+	}, nil
 }

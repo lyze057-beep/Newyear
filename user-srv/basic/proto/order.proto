@@ -153,9 +153,8 @@ message CartAddReq{
   int32 Quantity=3;
 }
 message CartAddResp{
-  int32 ID=1;
-  int32 Code=2;
-  string Msg=3;
+  int32 Code=1;
+  string Msg=2;
 }
 //购物车查找
 message CartListReq{
@@ -169,7 +168,7 @@ message CartInfo{
 message CartListResp{
   int32 Code=1;
   string Msg=2;
-    CartInfo Data=3;
+  repeated CartInfo Data=3;
 }
 //删除购物车
 message CartDeleteReq{
