@@ -22,6 +22,7 @@ type OrderMain struct {
 	TotalAmount float64 `gorm:"type:decimal(10,2);not null;comment:订单总金额"`
 	PayStatus   int     `gorm:"type:tinyint;default:0;comment:'支付状态:1=已支付,2=未支付'"`
 	OrderStatus int     `gorm:"type:tinyint;default:0;comment:'订单状态:1=待发货,2=待收货,3=完成,4=取消'"`
+	TradeNo     string  `gorm:"type:varchar(128);comment:支付编号"`
 }
 type OrderItem struct {
 	gorm.Model

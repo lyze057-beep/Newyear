@@ -115,6 +115,79 @@ message GetProductResp{
   string Msg=2;
   repeated Product Data=3;
 }
+//订单添加
+message OrderAddReq{
+  string OrderNo=1;
+  int32 UserId=2;
+  float TotalAmount=3;
+  int32 OrderStatus=4;
+}
+message OrderAddResp{
+  int32 OrderId=1;
+  int32 Code=2;
+  string Msg=3;
+  string Data=4;
+}
+//查询订单
+message GetOrderReq{
+  int32 PayStatus=1;
+}
+message GetOrder{
+  int32 Id=1;
+  string OrderNo=2;
+  int32 UserId=3;
+  float TotalAmount=4;
+  int32 PayStatus=5;
+  int32 OrderStatus=6;
+  string TradeNo=7;
+}
+message GetOrderResp{
+  int32 Code=1;
+  string Msg=2;
+    GetOrder Data=3;
+}
+//购物车添加
+message CartAddReq{
+  int32 ProductID =1;
+  int32 UserID=2;
+  int32 Quantity=3;
+}
+message CartAddResp{
+  int32 ID=1;
+  int32 Code=2;
+  string Msg=3;
+}
+//购物车查找
+message CartListReq{
+  int32 UserID=1;
+}
+message CartInfo{
+  int32 ProductID =1;
+  int32 UserID=2;
+  int32 Quantity=3;
+}
+message CartListResp{
+  int32 Code=1;
+  string Msg=2;
+    CartInfo Data=3;
+}
+//删除购物车
+message CartDeleteReq{
+     int32 userID=1;
+     int32 productID=2;
+}
+message CartDeleteResp{
+  int32 Code=1;
+  string Msg=2;
+}
+//清空购物车
+message DelCartReq{
+  int32 UserID=1;
+}
+message DelCartResp{
+  int32 Code=1;
+  string Msg=2;
+}
 service Order {
   rpc Register(RegisterReq) returns (RegisterResp);
   rpc Login(LoginReq) returns (LoginResp);
@@ -125,4 +198,10 @@ service Order {
   rpc Product(ProductReq) returns (ProductResp);
   rpc ListProduct(ListProductReq) returns (ListProductResp);
   rpc GetProduct(GetProductReq) returns (GetProductResp);
+  rpc OrderAdd(OrderAddReq) returns (OrderAddResp);
+  rpc GetOrder(GetOrderReq) returns (GetOrderResp);
+  rpc CartAdd(CartAddReq) returns (CartAddResp);
+  rpc CartList(CartListReq) returns (CartListResp);
+  rpc CartDelete(CartDeleteReq) returns (CartDeleteResp);
+  rpc DelCart(DelCartReq) returns (DelCartResp);
 }

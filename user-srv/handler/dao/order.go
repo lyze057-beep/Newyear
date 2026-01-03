@@ -10,6 +10,11 @@ import (
 
 type Register struct{}
 type Login struct{}
+type UpdatePassword struct{}
+type ListDao struct{}
+type Product struct{}
+type OrderDao struct{}
+type CartDao struct{}
 
 // 用户添加
 func (r *Register) Create(user *model.User) error {
@@ -29,9 +34,6 @@ func (r *Register) GetUser(username string) (*model.User, error) {
 }
 
 // 修改密码
-type UpdatePassword struct {
-}
-
 func (u *UpdatePassword) UpdateDao(username, newPassword string) error {
 	result := config.DB.Model(&model.User{}).Where("username=?", username).Update("password", newPassword)
 	if result.Error != nil {
@@ -43,15 +45,12 @@ func (u *UpdatePassword) UpdateDao(username, newPassword string) error {
 	return nil
 }
 
-type ListDao struct{}
-
+// 查询用户所有
 func (l *ListDao) ListUser(db *gorm.DB) ([]model.User, error) {
 	var users []model.User
 	config.DB.Find(&users)
 	return users, nil
 }
-
-type Product struct{}
 
 // 添加商品
 func (p *Product) CreateProduct(pro *model.Product) error {
@@ -74,4 +73,63 @@ func (p *Product) List() ([]model.Product, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+// 添加订单
+func (o *OrderDao) OrderAddDao(der *model.OrderMain) error {
+	return config.DB.Create(&der).Error
+}
+
+// MarkPaid 标记订单支付成功并写入支付宝交易号
+// pay_status=1 表示已支付
+func (o *OrderDao) MarkPaid(orderNo string, tradeNo string) error {
+	return config.DB.Model(&model.OrderMain{}).Where("order_no=?", orderNo).
+		Updates(map[string]interface{}{
+			"pay_status": 1,
+			"trade_no":   tradeNo,
+		}).Error
+}
+
+// 通过支付状态查询
+func (o *OrderDao) GetOrder(PayStatus int) (*model.OrderMain, error) {
+	var order model.OrderMain
+	if err := config.DB.Where("pay_status=?", PayStatus).First(&order).Error; err != nil {
+		return nil, err
+	}
+	return &order, nil
+}
+
+// 购物车添加条目，存在则累加数量
+func (d *CartDao) Add(userID uint, productID uint, qty int) error {
+	var item model.ShoppingCart
+	if err := config.DB.Where("user_id=? and product_id=?", userID, productID).
+		First(&item).Error; err != nil {
+		item.Quantity = qty
+		return config.DB.Save(&item).Error
+	}
+	item = model.ShoppingCart{
+		UserID:    item.UserID,
+		ProductID: item.ProductID,
+		Quantity:  qty,
+	}
+	return config.DB.Create(&item).Error
+}
+
+// list获取用户购物车列表
+func (d *CartDao) List(userID uint) ([]model.ShoppingCart, error) {
+	var items []model.ShoppingCart
+	if err := config.DB.Where("user_id=?", userID).Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+// Remove从购物车中移除指定的商品
+func (d *CartDao) Remove(userID uint, productID uint) error {
+	return config.DB.Where("user_id=? and product_id=?", userID, productID).Delete(&model.ShoppingCart{}).Error
+}
+
+// Clear清空购物车
+func (d *CartDao) Clear(userID uint) error {
+	return config.DB.Where("user_id=?", userID).Delete(&model.ShoppingCart{}).Error
 }

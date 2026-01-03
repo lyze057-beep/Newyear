@@ -12,6 +12,8 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Server struct {
@@ -225,4 +227,61 @@ func (s *Server) GetProduct(_ context.Context, in *__.GetProductReq) (*__.GetPro
 		Msg:  "查询成功",
 		Data: Productlist,
 	}, nil
+}
+func (s *Server) OrderAdd(_ context.Context, in *__.OrderAddReq) (*__.OrderAddResp, error) {
+	orderdao := &dao.OrderDao{}
+	OrderNo := uuid.NewString()
+	newOrder := &model.OrderMain{
+		OrderNo:     OrderNo,
+		UserID:      uint(in.UserId),
+		TotalAmount: float64(in.TotalAmount),
+		OrderStatus: int(in.OrderStatus),
+	}
+	if err := orderdao.OrderAddDao(newOrder); err != nil {
+		return nil, fmt.Errorf("订单添加失败")
+	}
+	amount := fmt.Sprintf("%.2f", float64(in.TotalAmount)/10.0)
+	alipay, _ := pkg.Alipay("订单支付", newOrder.OrderNo, amount)
+	return &__.OrderAddResp{
+		OrderId: int32(newOrder.ID),
+		Code:    200,
+		Msg:     "订单添加成功",
+		Data:    alipay,
+	}, nil
+}
+func (s *Server) GetOrder(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
+	getdao := &dao.OrderDao{}
+	getOrder, err := getdao.GetOrder(int(in.PayStatus))
+	if err != nil {
+		return nil, fmt.Errorf("数据库查询失败:" + err.Error())
+	}
+	if getOrder == nil {
+		return nil, fmt.Errorf("这条信息不存在")
+	}
+	get := &__.GetOrder{
+		Id:          int32(getOrder.ID),
+		OrderNo:     getOrder.OrderNo,
+		UserId:      int32(getOrder.UserID),
+		TotalAmount: float32(getOrder.TotalAmount),
+		PayStatus:   int32(getOrder.PayStatus),
+		OrderStatus: int32(getOrder.OrderStatus),
+		TradeNo:     getOrder.TradeNo,
+	}
+	return &__.GetOrderResp{
+		Code: 200,
+		Msg:  "查询成功",
+		Data: get,
+	}, nil
+}
+func (s *Server) CartAdd(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
+	return &__.GetOrderResp{}, nil
+}
+func (s *Server) CartList(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
+	return &__.GetOrderResp{}, nil
+}
+func (s *Server) CartDelete(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
+	return &__.GetOrderResp{}, nil
+}
+func (s *Server) DelCart(_ context.Context, in *__.GetOrderReq) (*__.GetOrderResp, error) {
+	return &__.GetOrderResp{}, nil
 }
