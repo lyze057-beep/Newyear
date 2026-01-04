@@ -34,6 +34,9 @@ const (
 	Order_CartList_FullMethodName       = "/proto.Order/CartList"
 	Order_CartDelete_FullMethodName     = "/proto.Order/CartDelete"
 	Order_DelCart_FullMethodName        = "/proto.Order/DelCart"
+	Order_AddAuth_FullMethodName        = "/proto.Order/AddAuth"
+	Order_GetAuth_FullMethodName        = "/proto.Order/GetAuth"
+	Order_UpdateAuth_FullMethodName     = "/proto.Order/UpdateAuth"
 )
 
 // OrderClient is the client API for Order service.
@@ -55,6 +58,9 @@ type OrderClient interface {
 	CartList(ctx context.Context, in *CartListReq, opts ...grpc.CallOption) (*CartListResp, error)
 	CartDelete(ctx context.Context, in *CartDeleteReq, opts ...grpc.CallOption) (*CartDeleteResp, error)
 	DelCart(ctx context.Context, in *DelCartReq, opts ...grpc.CallOption) (*DelCartResp, error)
+	AddAuth(ctx context.Context, in *AddAuthReq, opts ...grpc.CallOption) (*AddAuthResp, error)
+	GetAuth(ctx context.Context, in *GetAuthReq, opts ...grpc.CallOption) (*GetAuthResp, error)
+	UpdateAuth(ctx context.Context, in *UpdateAuthReq, opts ...grpc.CallOption) (*UpdateAuthResp, error)
 }
 
 type orderClient struct {
@@ -215,6 +221,36 @@ func (c *orderClient) DelCart(ctx context.Context, in *DelCartReq, opts ...grpc.
 	return out, nil
 }
 
+func (c *orderClient) AddAuth(ctx context.Context, in *AddAuthReq, opts ...grpc.CallOption) (*AddAuthResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddAuthResp)
+	err := c.cc.Invoke(ctx, Order_AddAuth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) GetAuth(ctx context.Context, in *GetAuthReq, opts ...grpc.CallOption) (*GetAuthResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAuthResp)
+	err := c.cc.Invoke(ctx, Order_GetAuth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) UpdateAuth(ctx context.Context, in *UpdateAuthReq, opts ...grpc.CallOption) (*UpdateAuthResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateAuthResp)
+	err := c.cc.Invoke(ctx, Order_UpdateAuth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
@@ -234,6 +270,9 @@ type OrderServer interface {
 	CartList(context.Context, *CartListReq) (*CartListResp, error)
 	CartDelete(context.Context, *CartDeleteReq) (*CartDeleteResp, error)
 	DelCart(context.Context, *DelCartReq) (*DelCartResp, error)
+	AddAuth(context.Context, *AddAuthReq) (*AddAuthResp, error)
+	GetAuth(context.Context, *GetAuthReq) (*GetAuthResp, error)
+	UpdateAuth(context.Context, *UpdateAuthReq) (*UpdateAuthResp, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -285,6 +324,15 @@ func (UnimplementedOrderServer) CartDelete(context.Context, *CartDeleteReq) (*Ca
 }
 func (UnimplementedOrderServer) DelCart(context.Context, *DelCartReq) (*DelCartResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelCart not implemented")
+}
+func (UnimplementedOrderServer) AddAuth(context.Context, *AddAuthReq) (*AddAuthResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddAuth not implemented")
+}
+func (UnimplementedOrderServer) GetAuth(context.Context, *GetAuthReq) (*GetAuthResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAuth not implemented")
+}
+func (UnimplementedOrderServer) UpdateAuth(context.Context, *UpdateAuthReq) (*UpdateAuthResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAuth not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -569,6 +617,60 @@ func _Order_DelCart_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_AddAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddAuthReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).AddAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_AddAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).AddAuth(ctx, req.(*AddAuthReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_GetAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAuthReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).GetAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_GetAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).GetAuth(ctx, req.(*GetAuthReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_UpdateAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAuthReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).UpdateAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_UpdateAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).UpdateAuth(ctx, req.(*UpdateAuthReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -635,6 +737,18 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelCart",
 			Handler:    _Order_DelCart_Handler,
+		},
+		{
+			MethodName: "AddAuth",
+			Handler:    _Order_AddAuth_Handler,
+		},
+		{
+			MethodName: "GetAuth",
+			Handler:    _Order_GetAuth_Handler,
+		},
+		{
+			MethodName: "UpdateAuth",
+			Handler:    _Order_UpdateAuth_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

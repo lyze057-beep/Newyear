@@ -39,3 +39,12 @@ type ShoppingCart struct {
 	ProductID uint `gorm:"type:int;not null;comment:关联商品id"`
 	Quantity  int  `gorm:"type:int;not null;comment:购买数量"`
 }
+type AuthorAuth struct {
+	gorm.Model
+	UserID       uint   `gorm:"not null;comment:关联用户id"`
+	RealName     string `gorm:"type:varchar(50);comment:实名信息"`
+	AuthQualify  string `gorm:"text;comment:创作资源(比如作品链接,证明材料)"`
+	Status       int    `gorm:"tinyint;default:0;comment:'审核状态 0=待审核/1=通过/2驳回'"`
+	RejectReason string `gorm:"varchar(50);comment:驳回原因"`
+	Auditor      string `gorm:"type:varchar(50);comment:审核人"`
+}

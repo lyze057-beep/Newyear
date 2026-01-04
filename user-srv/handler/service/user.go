@@ -326,3 +326,68 @@ func (s *Server) DelCart(_ context.Context, in *__.DelCartReq) (*__.DelCartResp,
 		Msg:  "清空成功",
 	}, nil
 }
+func (s *Server) AddAuth(_ context.Context, in *__.AddAuthReq) (*__.AddAuthResp, error) {
+	adddao := &dao.AuthorAuthDao{}
+	err := adddao.Create(&model.AuthorAuth{
+		UserID:      uint(in.UserID),
+		RealName:    in.RealName,
+		AuthQualify: in.AuthQualify,
+		Status:      0,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("申请失败")
+	}
+	return &__.AddAuthResp{
+		Code: 200,
+		Msg:  "申请成功",
+	}, nil
+}
+func (s *Server) GetAuth(_ context.Context, in *__.GetAuthReq) (*__.GetAuthResp, error) {
+	getdao := &dao.AuthorAuthDao{}
+	get, err := getdao.Get(uint(in.UserID))
+	if err != nil {
+		return nil, fmt.Errorf("数据库查询失败")
+	}
+	if get == nil {
+		return nil, fmt.Errorf("申请列表为空")
+	}
+	AuthInfo := &__.AuthInfo{
+		UserID:       int32(get.UserID),
+		RealName:     get.RealName,
+		AuthQualify:  get.AuthQualify,
+		Status:       int32(get.Status),
+		RejectReason: get.RejectReason,
+		Auditor:      get.Auditor,
+	}
+	return &__.GetAuthResp{
+		Code: 0,
+		Msg:  "查询成功",
+		Data: AuthInfo,
+	}, nil
+}
+func (s *Server) UpdateAuth(_ context.Context, in *__.UpdateAuthReq) (*__.UpdateAuthResp, error) {
+	if in.AuthID == 0 || (in.Status != 1 && in.Status != 2) {
+		return &__.UpdateAuthResp{
+			Code: 400,
+			Msg:  "认证ID不能为空，且状态只能是1或2",
+		}, nil
+	}
+	if in.Status == 2 && in.RejectReason == "" {
+		return &__.UpdateAuthResp{
+			Code: 400,
+			Msg:  "驳回请填写原因",
+		}, nil
+	}
+	updatedao := &dao.AuthorAuthDao{}
+	err := updatedao.Update(uint(in.AuthID), int(in.Status), in.Auditor, in.RejectReason)
+	if err != nil {
+		return &__.UpdateAuthResp{
+			Code: 400,
+			Msg:  "审核员操作失败:" + err.Error(),
+		}, nil
+	}
+	return &__.UpdateAuthResp{
+		Code: 200,
+		Msg:  "审核成功",
+	}, nil
+}

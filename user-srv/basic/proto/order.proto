@@ -187,6 +187,45 @@ message DelCartResp{
   int32 Code=1;
   string Msg=2;
 }
+//提交认证申请
+message AddAuthReq{
+  int32 UserID=1;
+  string RealName =2;
+   string AuthQualify=3;
+   int32 Status=4;
+}
+message AddAuthResp{
+  int32 Code=1;
+  string Msg =2;
+}
+//查询认证纪录
+message GetAuthReq{
+  int32 UserID=1;
+}
+message AuthInfo{
+   int32    UserID=1;
+   string   RealName=2;
+   string   AuthQualify=3;
+   int32   Status=4;
+   string     RejectReason=5;
+   string   Auditor=6;
+}
+message GetAuthResp{
+  int32 Code=1;
+  string Msg=2;
+   AuthInfo Data=3;
+}
+//审核
+message UpdateAuthReq{
+  int32 AuthID=1;
+  int32 Status=2;
+  string RejectReason=3;
+  string Auditor=4;
+}
+message UpdateAuthResp{
+  int32 Code=1;
+  string Msg=2;
+}
 service Order {
   rpc Register(RegisterReq) returns (RegisterResp);
   rpc Login(LoginReq) returns (LoginResp);
@@ -203,4 +242,7 @@ service Order {
   rpc CartList(CartListReq) returns (CartListResp);
   rpc CartDelete(CartDeleteReq) returns (CartDeleteResp);
   rpc DelCart(DelCartReq) returns (DelCartResp);
+  rpc AddAuth(AddAuthReq) returns (AddAuthResp);
+  rpc GetAuth(GetAuthReq) returns (GetAuthResp);
+  rpc UpdateAuth(UpdateAuthReq) returns (UpdateAuthResp);
 }

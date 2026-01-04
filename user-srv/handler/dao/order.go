@@ -15,6 +15,7 @@ type ListDao struct{}
 type Product struct{}
 type OrderDao struct{}
 type CartDao struct{}
+type AuthorAuthDao struct{}
 
 // 用户添加
 func (r *Register) Create(user *model.User) error {
@@ -138,4 +139,28 @@ func (d *CartDao) Remove(userID uint, productID uint) error {
 // Clear清空购物车
 func (d *CartDao) Clear(userID uint) error {
 	return config.DB.Where("user_id=?", userID).Delete(&model.ShoppingCart{}).Error
+}
+
+// 提交认证申请
+func (a *AuthorAuthDao) Create(auth *model.AuthorAuth) error {
+	return config.DB.Create(&auth).Error
+}
+
+// 查询认证状态
+func (a *AuthorAuthDao) Get(userID uint) (*model.AuthorAuth, error) {
+	var auth model.AuthorAuth
+	if err := config.DB.Where("user_id=?", userID).First(&auth).Error; err != nil {
+		return nil, err
+	}
+	return &auth, nil
+}
+
+// 审核状态
+func (a *AuthorAuthDao) Update(authID uint, status int, rejectReason, auditor string) error {
+	return config.DB.Model(&model.AuthorAuth{}).Where("id=?", authID).
+		Updates(map[string]interface{}{
+			"status":        status,
+			"reject_reason": rejectReason,
+			"auditor":       auditor,
+		}).Error
 }
