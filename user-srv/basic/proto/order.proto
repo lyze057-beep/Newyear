@@ -121,6 +121,8 @@ message OrderAddReq{
   int32 UserId=2;
   float TotalAmount=3;
   int32 OrderStatus=4;
+  int32 ProductId=5;
+  int32 Quantity=6;
 }
 message OrderAddResp{
   int32 OrderId=1;
@@ -168,7 +170,7 @@ message CartInfo{
 message CartListResp{
   int32 Code=1;
   string Msg=2;
-  repeated CartInfo Data=3;
+   repeated CartInfo Data=3;
 }
 //删除购物车
 message CartDeleteReq{
@@ -184,45 +186,6 @@ message DelCartReq{
   int32 UserID=1;
 }
 message DelCartResp{
-  int32 Code=1;
-  string Msg=2;
-}
-//提交认证申请
-message AddAuthReq{
-  int32 UserID=1;
-  string RealName =2;
-   string AuthQualify=3;
-   int32 Status=4;
-}
-message AddAuthResp{
-  int32 Code=1;
-  string Msg =2;
-}
-//查询认证纪录
-message GetAuthReq{
-  int32 UserID=1;
-}
-message AuthInfo{
-   int32    UserID=1;
-   string   RealName=2;
-   string   AuthQualify=3;
-   int32   Status=4;
-   string     RejectReason=5;
-   string   Auditor=6;
-}
-message GetAuthResp{
-  int32 Code=1;
-  string Msg=2;
-   AuthInfo Data=3;
-}
-//审核
-message UpdateAuthReq{
-  int32 AuthID=1;
-  int32 Status=2;
-  string RejectReason=3;
-  string Auditor=4;
-}
-message UpdateAuthResp{
   int32 Code=1;
   string Msg=2;
 }
@@ -242,7 +205,48 @@ service Order {
   rpc CartList(CartListReq) returns (CartListResp);
   rpc CartDelete(CartDeleteReq) returns (CartDeleteResp);
   rpc DelCart(DelCartReq) returns (DelCartResp);
-  rpc AddAuth(AddAuthReq) returns (AddAuthResp);
-  rpc GetAuth(GetAuthReq) returns (GetAuthResp);
-  rpc UpdateAuth(UpdateAuthReq) returns (UpdateAuthResp);
+  rpc AuthorAuthCreate(AuthorAuthCreateReq) returns (AuthorAuthCreateResp);
+  rpc AuthorAuthGet(AuthorAuthGetReq) returns (AuthorAuthGetResp);
+  rpc AuthorAuthUpdate(AuthorAuthUpdateReq) returns (AuthorAuthUpdateResp);
+}
+
+//入驻审核-创建
+message AuthorAuthCreateReq{
+  int32 UserID=1;
+  string RealName=2;
+  string AuthQualify=3;
+}
+message AuthorAuthCreateResp{
+  int32 Code=1;
+  string Msg=2;
+  int32 AuthID=3;
+}
+//入驻审核-查询
+message AuthorAuthGetReq{
+  int32 UserID=1;
+}
+message AuthorAuthInfo{
+  int32 Id=1;
+  int32 UserID=2;
+  string RealName=3;
+  string AuthQualify=4;
+  int32 Status=5;
+  string RejectReason=6;
+  string Auditor=7;
+}
+message AuthorAuthGetResp{
+  int32 Code=1;
+  string Msg=2;
+  AuthorAuthInfo Data=3;
+}
+//入驻审核-审核更新
+message AuthorAuthUpdateReq{
+  int32 AuthID=1;
+  int32 Status=2;
+  string RejectReason=3;
+  string Auditor=4;
+}
+message AuthorAuthUpdateResp{
+  int32 Code=1;
+  string Msg=2;
 }

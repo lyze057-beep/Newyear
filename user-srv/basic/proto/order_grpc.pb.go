@@ -19,24 +19,24 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Order_Register_FullMethodName       = "/proto.Order/Register"
-	Order_Login_FullMethodName          = "/proto.Order/Login"
-	Order_SendSms_FullMethodName        = "/proto.Order/SendSms"
-	Order_UpdatePassword_FullMethodName = "/proto.Order/UpdatePassword"
-	Order_ListUser_FullMethodName       = "/proto.Order/ListUser"
-	Order_ListGet_FullMethodName        = "/proto.Order/ListGet"
-	Order_Product_FullMethodName        = "/proto.Order/Product"
-	Order_ListProduct_FullMethodName    = "/proto.Order/ListProduct"
-	Order_GetProduct_FullMethodName     = "/proto.Order/GetProduct"
-	Order_OrderAdd_FullMethodName       = "/proto.Order/OrderAdd"
-	Order_GetOrder_FullMethodName       = "/proto.Order/GetOrder"
-	Order_CartAdd_FullMethodName        = "/proto.Order/CartAdd"
-	Order_CartList_FullMethodName       = "/proto.Order/CartList"
-	Order_CartDelete_FullMethodName     = "/proto.Order/CartDelete"
-	Order_DelCart_FullMethodName        = "/proto.Order/DelCart"
-	Order_AddAuth_FullMethodName        = "/proto.Order/AddAuth"
-	Order_GetAuth_FullMethodName        = "/proto.Order/GetAuth"
-	Order_UpdateAuth_FullMethodName     = "/proto.Order/UpdateAuth"
+	Order_Register_FullMethodName         = "/proto.Order/Register"
+	Order_Login_FullMethodName            = "/proto.Order/Login"
+	Order_SendSms_FullMethodName          = "/proto.Order/SendSms"
+	Order_UpdatePassword_FullMethodName   = "/proto.Order/UpdatePassword"
+	Order_ListUser_FullMethodName         = "/proto.Order/ListUser"
+	Order_ListGet_FullMethodName          = "/proto.Order/ListGet"
+	Order_Product_FullMethodName          = "/proto.Order/Product"
+	Order_ListProduct_FullMethodName      = "/proto.Order/ListProduct"
+	Order_GetProduct_FullMethodName       = "/proto.Order/GetProduct"
+	Order_OrderAdd_FullMethodName         = "/proto.Order/OrderAdd"
+	Order_GetOrder_FullMethodName         = "/proto.Order/GetOrder"
+	Order_CartAdd_FullMethodName          = "/proto.Order/CartAdd"
+	Order_CartList_FullMethodName         = "/proto.Order/CartList"
+	Order_CartDelete_FullMethodName       = "/proto.Order/CartDelete"
+	Order_DelCart_FullMethodName          = "/proto.Order/DelCart"
+	Order_AuthorAuthCreate_FullMethodName = "/proto.Order/AuthorAuthCreate"
+	Order_AuthorAuthGet_FullMethodName    = "/proto.Order/AuthorAuthGet"
+	Order_AuthorAuthUpdate_FullMethodName = "/proto.Order/AuthorAuthUpdate"
 )
 
 // OrderClient is the client API for Order service.
@@ -58,9 +58,9 @@ type OrderClient interface {
 	CartList(ctx context.Context, in *CartListReq, opts ...grpc.CallOption) (*CartListResp, error)
 	CartDelete(ctx context.Context, in *CartDeleteReq, opts ...grpc.CallOption) (*CartDeleteResp, error)
 	DelCart(ctx context.Context, in *DelCartReq, opts ...grpc.CallOption) (*DelCartResp, error)
-	AddAuth(ctx context.Context, in *AddAuthReq, opts ...grpc.CallOption) (*AddAuthResp, error)
-	GetAuth(ctx context.Context, in *GetAuthReq, opts ...grpc.CallOption) (*GetAuthResp, error)
-	UpdateAuth(ctx context.Context, in *UpdateAuthReq, opts ...grpc.CallOption) (*UpdateAuthResp, error)
+	AuthorAuthCreate(ctx context.Context, in *AuthorAuthCreateReq, opts ...grpc.CallOption) (*AuthorAuthCreateResp, error)
+	AuthorAuthGet(ctx context.Context, in *AuthorAuthGetReq, opts ...grpc.CallOption) (*AuthorAuthGetResp, error)
+	AuthorAuthUpdate(ctx context.Context, in *AuthorAuthUpdateReq, opts ...grpc.CallOption) (*AuthorAuthUpdateResp, error)
 }
 
 type orderClient struct {
@@ -221,30 +221,30 @@ func (c *orderClient) DelCart(ctx context.Context, in *DelCartReq, opts ...grpc.
 	return out, nil
 }
 
-func (c *orderClient) AddAuth(ctx context.Context, in *AddAuthReq, opts ...grpc.CallOption) (*AddAuthResp, error) {
+func (c *orderClient) AuthorAuthCreate(ctx context.Context, in *AuthorAuthCreateReq, opts ...grpc.CallOption) (*AuthorAuthCreateResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddAuthResp)
-	err := c.cc.Invoke(ctx, Order_AddAuth_FullMethodName, in, out, cOpts...)
+	out := new(AuthorAuthCreateResp)
+	err := c.cc.Invoke(ctx, Order_AuthorAuthCreate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *orderClient) GetAuth(ctx context.Context, in *GetAuthReq, opts ...grpc.CallOption) (*GetAuthResp, error) {
+func (c *orderClient) AuthorAuthGet(ctx context.Context, in *AuthorAuthGetReq, opts ...grpc.CallOption) (*AuthorAuthGetResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetAuthResp)
-	err := c.cc.Invoke(ctx, Order_GetAuth_FullMethodName, in, out, cOpts...)
+	out := new(AuthorAuthGetResp)
+	err := c.cc.Invoke(ctx, Order_AuthorAuthGet_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *orderClient) UpdateAuth(ctx context.Context, in *UpdateAuthReq, opts ...grpc.CallOption) (*UpdateAuthResp, error) {
+func (c *orderClient) AuthorAuthUpdate(ctx context.Context, in *AuthorAuthUpdateReq, opts ...grpc.CallOption) (*AuthorAuthUpdateResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateAuthResp)
-	err := c.cc.Invoke(ctx, Order_UpdateAuth_FullMethodName, in, out, cOpts...)
+	out := new(AuthorAuthUpdateResp)
+	err := c.cc.Invoke(ctx, Order_AuthorAuthUpdate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -270,9 +270,9 @@ type OrderServer interface {
 	CartList(context.Context, *CartListReq) (*CartListResp, error)
 	CartDelete(context.Context, *CartDeleteReq) (*CartDeleteResp, error)
 	DelCart(context.Context, *DelCartReq) (*DelCartResp, error)
-	AddAuth(context.Context, *AddAuthReq) (*AddAuthResp, error)
-	GetAuth(context.Context, *GetAuthReq) (*GetAuthResp, error)
-	UpdateAuth(context.Context, *UpdateAuthReq) (*UpdateAuthResp, error)
+	AuthorAuthCreate(context.Context, *AuthorAuthCreateReq) (*AuthorAuthCreateResp, error)
+	AuthorAuthGet(context.Context, *AuthorAuthGetReq) (*AuthorAuthGetResp, error)
+	AuthorAuthUpdate(context.Context, *AuthorAuthUpdateReq) (*AuthorAuthUpdateResp, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -325,14 +325,14 @@ func (UnimplementedOrderServer) CartDelete(context.Context, *CartDeleteReq) (*Ca
 func (UnimplementedOrderServer) DelCart(context.Context, *DelCartReq) (*DelCartResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelCart not implemented")
 }
-func (UnimplementedOrderServer) AddAuth(context.Context, *AddAuthReq) (*AddAuthResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddAuth not implemented")
+func (UnimplementedOrderServer) AuthorAuthCreate(context.Context, *AuthorAuthCreateReq) (*AuthorAuthCreateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthorAuthCreate not implemented")
 }
-func (UnimplementedOrderServer) GetAuth(context.Context, *GetAuthReq) (*GetAuthResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAuth not implemented")
+func (UnimplementedOrderServer) AuthorAuthGet(context.Context, *AuthorAuthGetReq) (*AuthorAuthGetResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthorAuthGet not implemented")
 }
-func (UnimplementedOrderServer) UpdateAuth(context.Context, *UpdateAuthReq) (*UpdateAuthResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAuth not implemented")
+func (UnimplementedOrderServer) AuthorAuthUpdate(context.Context, *AuthorAuthUpdateReq) (*AuthorAuthUpdateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthorAuthUpdate not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -617,56 +617,56 @@ func _Order_DelCart_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Order_AddAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddAuthReq)
+func _Order_AuthorAuthCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthorAuthCreateReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServer).AddAuth(ctx, in)
+		return srv.(OrderServer).AuthorAuthCreate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Order_AddAuth_FullMethodName,
+		FullMethod: Order_AuthorAuthCreate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServer).AddAuth(ctx, req.(*AddAuthReq))
+		return srv.(OrderServer).AuthorAuthCreate(ctx, req.(*AuthorAuthCreateReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Order_GetAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAuthReq)
+func _Order_AuthorAuthGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthorAuthGetReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServer).GetAuth(ctx, in)
+		return srv.(OrderServer).AuthorAuthGet(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Order_GetAuth_FullMethodName,
+		FullMethod: Order_AuthorAuthGet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServer).GetAuth(ctx, req.(*GetAuthReq))
+		return srv.(OrderServer).AuthorAuthGet(ctx, req.(*AuthorAuthGetReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Order_UpdateAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateAuthReq)
+func _Order_AuthorAuthUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthorAuthUpdateReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServer).UpdateAuth(ctx, in)
+		return srv.(OrderServer).AuthorAuthUpdate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Order_UpdateAuth_FullMethodName,
+		FullMethod: Order_AuthorAuthUpdate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServer).UpdateAuth(ctx, req.(*UpdateAuthReq))
+		return srv.(OrderServer).AuthorAuthUpdate(ctx, req.(*AuthorAuthUpdateReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -739,16 +739,16 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Order_DelCart_Handler,
 		},
 		{
-			MethodName: "AddAuth",
-			Handler:    _Order_AddAuth_Handler,
+			MethodName: "AuthorAuthCreate",
+			Handler:    _Order_AuthorAuthCreate_Handler,
 		},
 		{
-			MethodName: "GetAuth",
-			Handler:    _Order_GetAuth_Handler,
+			MethodName: "AuthorAuthGet",
+			Handler:    _Order_AuthorAuthGet_Handler,
 		},
 		{
-			MethodName: "UpdateAuth",
-			Handler:    _Order_UpdateAuth_Handler,
+			MethodName: "AuthorAuthUpdate",
+			Handler:    _Order_AuthorAuthUpdate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

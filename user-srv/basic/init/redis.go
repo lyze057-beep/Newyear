@@ -4,7 +4,8 @@ import (
 	"5/work/Newyear/user-srv/basic/config"
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var ctx = context.Background()
@@ -17,7 +18,7 @@ func InitRedis() {
 		DB:       0,                  // use default DB
 	})
 
-	_, err := config.Rdb.Ping(ctx).Result()
+	err := config.Rdb.Set(ctx, "key", "value", 0).Err()
 	if err != nil {
 		panic(err)
 	}
