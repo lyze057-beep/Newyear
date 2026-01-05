@@ -18,7 +18,7 @@ func InitRedis() {
 		DB:       0,                  // use default DB
 	})
 
-	err := config.Rdb.Set(ctx, "key", "value", 0).Err()
+	err := config.Rdb.Set(ctx, "test", "hello", 0).Err()
 	if err != nil {
 		panic(err)
 	}

@@ -88,6 +88,16 @@ func (o *OrderDao) GetOrder(payStatus int) (*model.OrderMain, error) {
 	return &order, nil
 }
 
+// 标记订单已支付（根据订单号）
+func (o *OrderDao) MarkPaidByOrderNo(orderNo string, tradeNo string) error {
+	return config.DB.Model(&model.OrderMain{}).
+		Where("order_no=?", orderNo).
+		Updates(map[string]interface{}{
+			"pay_status": 1,
+			"trade_no":   tradeNo,
+		}).Error
+}
+
 // 单商品立即下单
 func (o *OrderDao) CreateOrderWithTx(userID uint, productID uint, buyQty int) (*model.OrderMain, error) {
 	var created *model.OrderMain
